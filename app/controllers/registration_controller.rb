@@ -59,7 +59,7 @@ class RegistrationController < ApplicationController
   end
 
   def submit
-    return if params[:iss] == ''
+    return if params[:iss] == '' || params[:shared_secret] == '' || params[:deployment_id] == ''
 
     tenant = RailsLti2Provider::Tenant.where(uid: params[:tenant]).first
     return if tenant.nil?
@@ -67,10 +67,11 @@ class RegistrationController < ApplicationController
     reg = {
       issuer: params[:iss],
       client_id: params[:client_id],
+      deployment_id: params[:deployment_id],
       key_set_url: params[:key_set_url],
       auth_token_url: params[:auth_token_url],
       auth_login_url: params[:auth_login_url],
-      tenant: params[:tenant]
+      tenant: params[:tenant],
     }
 
     if params.key?('private_key_path') && params.key?('public_key_path')
@@ -105,13 +106,21 @@ class RegistrationController < ApplicationController
       end
     # elsif ! lti_registration_exists?(params[:iss])
     else
-      RailsLti2Provider::Tool.create!(
-        uuid: params[:iss],
-        shared_secret: params[:client_id],
-        tool_settings: reg.to_json,
-        lti_version: '1.3.0',
-        tenant: tenant
-      )
+      begin
+        RailsLti2Provider::Tool.create!(
+          uuid: params[:iss],
+          shared_secret: params[:client_id],
+          deployment_id: params[:deployment_id],
+          tool_settings: reg.to_json,
+          lti_version: '1.3.0',
+          tenant: tenant
+        )
+      rescue ActiveRecord::RecordInvalid => e
+        render json: {
+          error: e.to_s
+        }, status: :unprocessable_entity
+        return
+      end
     end
 
     redirect_to(registration_list_path)
