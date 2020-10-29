@@ -44,7 +44,7 @@ gem 'doorkeeper', '~> 5.3.0'
 gem 'lodash-rails'
 gem 'react-rails'
 
-gem 'rails_lti2_provider', git: 'https://github.com/blindsidenetworks/rails_lti2_provider.git', tag: '0.0.9'
+gem 'rails_lti2_provider', git: 'https://github.com/blindsidenetworks/rails_lti2_provider.git', tag: '0.1.0'
 
 gem 'activerecord-session_store'
 
@@ -65,7 +65,7 @@ group :development, :test do
 end
 
 group :development do
-  gem 'rubocop', '~> 0.79.0', require: false
+  gem 'rubocop', '~> 0.90.0', require: false
   gem 'rubocop-rails', '~> 2.4.0', require: false
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
   gem 'listen', '~> 3.0.5'
