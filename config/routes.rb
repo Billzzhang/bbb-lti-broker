@@ -49,7 +49,7 @@ Rails.application.routes.draw do
     use_doorkeeper do
       # Including 'skip_controllers :application' disables the controller for managing external applications
       #   [http://example.com/lti/oauth/applications]
-      skip_controllers :applications unless ENV['DEVELOPER_MODE_ENABLED'] == 'true'
+      skip_controllers :applications unless Rails.configuration.developer_mode_enabled
     end
 
     get '/', to: 'application#index', as: 'lti_home'
@@ -59,7 +59,7 @@ Rails.application.routes.draw do
     post ':app/auth/login', to: 'auth#login', as: 'openid_login'
     post ':app/messages/oblti', to: 'message#openid_launch_request', as: 'openid_launch'
     # requests from tool consumer go through this path
-    get ':app/messages/blti', to: 'tool_profile#xml_config', app: ENV['DEFAULT_LTI_TOOL'] || 'default'
+    get ':app/messages/blti', to: 'tool_profile#xml_config', app: Rails.configuration.default_lti_tool || 'default'
     post ':app/messages/blti', to: 'message#basic_lti_launch_request', as: 'blti_launch'
 
     # requests from xml_config go through these paths
@@ -74,8 +74,8 @@ Rails.application.routes.draw do
     match ':app/json_config/:temp_key_token', to: 'tool_profile#json_config', via: [:get, :post], as: 'json_config' # , :defaults => {:format => 'json'}
 
     # xml config and builder for lti 1.0/1.1
-    get ':app/xml_config', to: 'tool_profile#xml_config', app: ENV['DEFAULT_LTI_TOOL'] || 'default', as: :xml_config
-    get ':app/xml_builder', to: 'tool_profile#xml_builder', app: ENV['DEFAULT_LTI_TOOL'] || 'default', as: :xml_builder
+    get ':app/xml_config', to: 'tool_profile#xml_config', app: Rails.configuration.default_lti_tool || 'default', as: :xml_config
+    get ':app/xml_builder', to: 'tool_profile#xml_builder', app: Rails.configuration.default_lti_tool || 'default', as: :xml_builder
     # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
     mount RailsLti2Provider::Engine => '/rails_lti2_provider'

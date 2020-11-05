@@ -35,5 +35,6 @@ module BbbLtiBroker
     config.build_number = ENV['BUILD_NUMBER'] || 'v1'
 
     config.developer_mode_enabled = (ENV['DEVELOPER_MODE_ENABLED'] == 'true')
+    config.default_lti_tool = ENV['DEFAULT_LTI_TOOL']
   end
 end

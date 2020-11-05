@@ -26,7 +26,7 @@ class RegistrationController < ApplicationController
   include TemporaryStore
 
   def list
-    if ENV['DEVELOPER_MODE_ENABLED'] != 'true'
+    unless Rails.configuration.developer_mode_enabled
       render(file: Rails.root.join('public/404'), layout: false, status: :not_found)
       return
     end
@@ -39,8 +39,8 @@ class RegistrationController < ApplicationController
   # only available if developer mode is on
   # production - use rails task
   def new
-    @app = ENV['DEFAULT_LTI_TOOL']
-    @app ||= 'default' if ENV['DEVELOPER_MODE_ENABLED'] == 'true'
+    @app = Rails.configuration.default_lti_tool
+    @app ||= 'default' unless Rails.configuration.developer_mode_enabled
     @apps = lti_apps
     set_temp_keys
     set_starter_info

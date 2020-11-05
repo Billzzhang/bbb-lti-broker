@@ -27,14 +27,14 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>. %>
     <% end %>
 
     <p>View the LTI configuration xml <%= link_to('here', xml_config_url, target: "_blank") %>.</p>
-    <% if ENV['DEVELOPER_MODE_ENABLED'] == 'true'%>
+    <% if Rails.configuration.developer_mode_enabled %>
         <p> Customize the configuration <%= link_to('here', xml_url) %>.</p>
         <p>This configuration is used to install your LTI tool into an LSM.  This xml can be referenced by url or copied and pasted during the install process.</p>
     <% end %>
 
     <h2>LTI Launch</h2>
 
-    <p>The LTI Launch endpoint is <%= link_to(blti_launch_url(app: ENV['DEFAULT_LTI_TOOL']), blti_launch_url(app: ENV['DEFAULT_LTI_TOOL'])) %>.</p>
+    <p>The LTI Launch endpoint is <%= link_to(blti_launch_url(app: Rails.configuration.default_lti_tool), blti_launch_url(app: Rails.configuration.default_lti_tool)) %>.</p>
 
     <p>Note, this url is typically sent a POST request with all sorts of LTI data.  If you access it directly, it'll display an error page indicating your request did not validate.</p>
 
