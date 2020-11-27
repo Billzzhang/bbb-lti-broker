@@ -197,7 +197,6 @@ module OpenIdAuthenticator
       context_type: jwt_body['https://purl.imsglobal.org/spec/lti/claim/context']['type'].join(','),
       lis_course_section_sourcedid: jwt_body['https://purl.imsglobal.org/spec/lti/claim/lis']['course_section_sourcedid'],
       launch_presentation_locale: jwt_body['https://purl.imsglobal.org/spec/lti/claim/launch_presentation']['locale'],
-      ext_lms: jwt_body['https://purl.imsglobal.org/spec/lti/claim/ext']['lms'],
       tool_consumer_info_product_family_code: jwt_body['https://purl.imsglobal.org/spec/lti/claim/tool_platform']['family_code'],
       tool_consumer_info_version: jwt_body['https://purl.imsglobal.org/spec/lti/claim/tool_platform']['version'],
       lti_version: jwt_body['https://purl.imsglobal.org/spec/lti/claim/version'],
@@ -216,5 +215,6 @@ module OpenIdAuthenticator
     }
     p[:lti_message_type] = 'basic-lti-launch-request' if jwt_body['https://purl.imsglobal.org/spec/lti/claim/message_type'] == 'LtiResourceLinkRequest'
     p[:lti_message_type] = 'ContentItemSelectionRequest' if jwt_body['https://purl.imsglobal.org/spec/lti/claim/message_type'] == 'LtiDeepLinkingRequest'
+    p
   end
 end
